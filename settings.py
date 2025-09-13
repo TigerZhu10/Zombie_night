@@ -6,3 +6,5 @@ class Settings():
         self.WINDOW_HEIGHT = 768
 
         self.bg_color = (0,0,0)
+
+        self.tile_size = 32

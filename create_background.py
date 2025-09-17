@@ -2,11 +2,12 @@ import pygame
 
 class Background():
     def __init__(self,game_settings,screen):
-        self.dirt = pygame.image.load("./assets/images/tiles/Tile (1).png")
-        self.ground = pygame.image.load("./assets/images/tiles/Tile (2).png")
-        self.grass_filed_left = pygame.image.load("./assets/images/tiles/Tile (3).png")
-        self.grass_filed = pygame.image.load("./assets/images/tiles/Tile (4).png")
-        self.grass_filed_right = pygame.image.load("./assets/images/tiles/Tile (5).png")
+
+        self.dirt = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (1).png"), (32,32))
+        self.ground = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (2).png"), (32,32))
+        self.grass_filed_left = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (3).png"), (32,32))
+        self.grass_filed = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (4).png"), (32,32))
+        self.grass_filed_right = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (5).png"), (32,32))
 
         self.screen = screen
         self.game_settings = game_settings
@@ -34,8 +35,8 @@ class Background():
             [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
             [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
             [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-            [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-            [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         ]
 

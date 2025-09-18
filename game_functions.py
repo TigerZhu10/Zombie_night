@@ -14,6 +14,7 @@ def Key_down(event, my_hero):
 
 def check_mouse_key_events(my_hero):
     for ev in pygame.event.get():
+        # print(ev)
         if ev.type == pygame.QUIT:
             sys.exit()
         

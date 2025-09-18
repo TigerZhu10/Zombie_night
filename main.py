@@ -6,7 +6,11 @@ from hero import Hero
 
 pygame.init()
 
+FPS = 60
+clock = pygame.time.Clock()
+
 game_settings = Settings()
+
 
 screen = pygame.display.set_mode((game_settings.WINDOW_WIDTH, game_settings.WINDOW_HEIGHT))
 pygame.display.set_caption("Zombie Night!")
@@ -24,4 +28,6 @@ def Game_runner():
     while game_running: 
         game_functions.check_mouse_key_events(my_hero)
         game_functions.update_screen(game_settings, screen, background, tile_map, my_hero)
+
+        clock.tick(FPS)
 Game_runner()

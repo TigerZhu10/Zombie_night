@@ -10,17 +10,8 @@ class Background():
         self.grass_filed = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (4).png"), (32,32))
         self.grass_filed_right = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (5).png"), (32,32))
 
-        self.dirt_rect = self.dirt.get_rect()
-        self.ground_rect = self.ground.get_rect()
-        self.grass_filed_left_rect = self.grass_filed_left.get_rect()
-        self.grass_filed_rect = self.grass_filed.get_rect()
-        self.grass_filed_right_rect = self.grass_filed_right.get_rect()
-
-
-
         self.screen = screen
         self.game_settings = game_settings
-
 
         self.tilemap = [
             [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
@@ -49,7 +40,7 @@ class Background():
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         ]
 
-        self.all_tiles = []
+        self.all_tiles_rect = []
         for row_index, row in enumerate(self.tilemap):
             for col_index, tile in enumerate(row):
                 if tile in (0, 1, 2, 3, 4):
@@ -59,7 +50,7 @@ class Background():
                         self.game_settings.tile_size,
                         self.game_settings.tile_size
                     )
-                    self.all_tiles.append(rect)
+                    self.all_tiles_rect.append(rect)
 
     def draw_tile_map(self):
         for y, row in enumerate(self.tilemap):

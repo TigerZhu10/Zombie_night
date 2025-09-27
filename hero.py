@@ -48,11 +48,11 @@ class Hero():
     def hit_floor(self):
         self.on_ground = False  
 
-        for tile in self.tile_map.all_tiles:
+        for tile in self.tile_map.all_tiles_rect:
             if self.rect.colliderect(tile):
                 if self.velocity.y > 0 and self.rect.bottom <= tile.bottom:
                     self.rect.bottom = tile.top 
-                    # self.position.y = self.rect.bottom
+                    self.position.y = self.rect.top
                     self.velocity.y = 0
                     self.on_ground = True
 

@@ -35,6 +35,8 @@ def update_screen(game_settings,screen,background,tile_map, my_hero):
 
     my_hero.moving_hero()
 
+    my_hero.hit_floor()
+
 
     
 

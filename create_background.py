@@ -2,12 +2,21 @@ import pygame
 
 class Background():
     def __init__(self,game_settings,screen):
+        super().__init__()
 
         self.dirt = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (1).png"), (32,32))
         self.ground = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (2).png"), (32,32))
         self.grass_filed_left = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (3).png"), (32,32))
         self.grass_filed = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (4).png"), (32,32))
         self.grass_filed_right = pygame.transform.scale(pygame.image.load("./assets/images/tiles/Tile (5).png"), (32,32))
+
+        self.dirt_rect = self.dirt.get_rect()
+        self.ground_rect = self.ground.get_rect()
+        self.grass_filed_left_rect = self.grass_filed_left.get_rect()
+        self.grass_filed_rect = self.grass_filed.get_rect()
+        self.grass_filed_right_rect = self.grass_filed_right.get_rect()
+
+
 
         self.screen = screen
         self.game_settings = game_settings
@@ -40,6 +49,17 @@ class Background():
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         ]
 
+        self.all_tiles = []
+        for row_index, row in enumerate(self.tilemap):
+            for col_index, tile in enumerate(row):
+                if tile in (0, 1, 2, 3, 4):
+                    rect = pygame.Rect(
+                        col_index * self.game_settings.tile_size,
+                        row_index * self.game_settings.tile_size,
+                        self.game_settings.tile_size,
+                        self.game_settings.tile_size
+                    )
+                    self.all_tiles.append(rect)
 
     def draw_tile_map(self):
         for y, row in enumerate(self.tilemap):
@@ -54,6 +74,5 @@ class Background():
                     self.screen.blit(self.grass_filed_right, (x * self.game_settings.tile_size, y * self.game_settings.tile_size))
                 elif tile == 4:
                     self.screen.blit(self.grass_filed, (x * self.game_settings.tile_size, y * self.game_settings.tile_size))
-                    
 
 

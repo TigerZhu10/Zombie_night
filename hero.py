@@ -3,9 +3,10 @@ import pygame, random
 vector = pygame.math.Vector2
 
 class Hero():
-    def __init__(self,screen, game_settings):
+    def __init__(self,screen, game_settings, tile_map):
         self.screen = screen
         self.game_settings = game_settings
+        self.tile_map = tile_map
         self.image = pygame.image.load("./assets/images/player/jump/idle/idle (1).png")
         self.image = pygame.transform.scale(pygame.image.load("./assets/images/player/jump/idle/idle (1).png"), (58,70))
         self.rect = self.image.get_rect()
@@ -45,8 +46,17 @@ class Hero():
         self.rect.topleft = self.position
     
     def hit_floor(self):
-        self.on_ground = False 
-        for tile in self.all_tiles:
+        self.on_ground = False  
+
+        for tile in self.tile_map.all_tiles:
+            if self.rect.colliderect(tile):
+                if self.velocity.y > 0 and self.rect.bottom <= tile.bottom:
+                    self.rect.bottom = tile.top 
+                    # self.position.y = self.rect.bottom
+                    self.velocity.y = 0
+                    self.on_ground = True
+
+
 
         
     def display_hero(self): 

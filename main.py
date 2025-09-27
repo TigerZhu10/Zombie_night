@@ -18,9 +18,9 @@ pygame.display.set_caption("Zombie Night!")
 background = pygame.image.load("./assets/images/background.png")
 background = pygame.transform.scale(background, (game_settings.WINDOW_WIDTH, game_settings.WINDOW_HEIGHT))
 
-my_hero = Hero(screen, game_settings)
-
 tile_map = Background(game_settings,screen)
+
+my_hero = Hero(screen, game_settings, tile_map)
 
 
 def Game_runner():

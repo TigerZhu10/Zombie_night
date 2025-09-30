@@ -5,12 +5,17 @@ def Key_up(event, my_hero):
         my_hero.moving_right = False
     elif event.key == pygame.K_LEFT:
         my_hero.moving_left = False
+    elif event.key == pygame.K_SPACE:
+        my_hero.moving_up = False
+
     
 def Key_down(event, my_hero):
     if event.key == pygame.K_RIGHT:
         my_hero.moving_right = True
     elif event.key == pygame.K_LEFT:
         my_hero.moving_left = True 
+    elif event.key == pygame.K_SPACE:
+        my_hero.moving_up = True
 
 def check_mouse_key_events(my_hero):
     for ev in pygame.event.get():
@@ -36,6 +41,8 @@ def update_screen(game_settings,screen,background,tile_map, my_hero):
     my_hero.moving_hero()
 
     my_hero.hit_floor()
+
+    my_hero.jump()
 
 
     

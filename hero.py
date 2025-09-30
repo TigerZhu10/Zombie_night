@@ -15,6 +15,7 @@ class Hero():
 
         self.moving_right = False
         self.moving_left = False
+        self.moving_up = False
 
         self.position = vector(self.x, self.y)
         self.velocity = vector(0, 0)
@@ -22,8 +23,8 @@ class Hero():
 
         self.HORIZONTAL_ACCELERATION = 1
         self.HORIZONTAL_FRICTION = 0.15
-        self.VERTICAL_JUMP_SPEED = 15
-        self.GRAVITY = 0.05  
+        self.VERTICAL_JUMP_SPEED = 10
+        self.GRAVITY = 0.25
 
     def moving_hero(self):
         self.acceleration = vector(0, self.GRAVITY)
@@ -55,6 +56,12 @@ class Hero():
                     self.position.y = self.rect.top
                     self.velocity.y = 0
                     self.on_ground = True
+
+    def jump(self):
+        if self.on_ground and self.moving_up:
+            self.velocity.y = -self.VERTICAL_JUMP_SPEED
+            self.on_ground = False
+
 
 
 

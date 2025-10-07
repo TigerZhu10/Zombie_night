@@ -19,6 +19,9 @@ class Hero():
 
         self.jump_right_sprites = self.load_images("./assets/images/player/jump/", "Jump", 9)
         self.jump_left_sprites = [pygame.transform.flip(s, True, False) for s in self.jump_right_sprites]
+
+        self.attack_right_sprites = self.load_images("./assets/images/player/attack/", "Attack", 9)
+        self.attack_left_sprites = [pygame.transform.flip(s, True, False) for s in self.attack_right_sprites]
         
         
         # starting image
@@ -33,6 +36,7 @@ class Hero():
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
+        self.attacking = False
 
         self.position = vector(self.x, self.y)
         self.velocity = vector(0, 0)
@@ -44,20 +48,6 @@ class Hero():
         self.GRAVITY = 0.35
 
         self.on_ground = False
-
-    def load_images(self, folder, prefix, count):
-        """
-        批量加载并缩放动画帧
-        folder: 子文件夹名 (如 "boy")
-        prefix: 文件名前缀 (如 "Run")
-        count: 帧数量
-        """
-        return [
-            pygame.transform.scale(
-                pygame.image.load(f"{folder}/{prefix} ({i}).png"), (64, 64)
-            ) 
-            for i in range(1, count + 1)# count is 8 so the range is from 1 to (8+1) and you will get a value from 1 to 8
-        ]
 
     def moving_hero(self):
         self.acceleration = vector(0, self.GRAVITY)
@@ -98,6 +88,20 @@ class Hero():
         self.position = self.position + self.velocity + 0.5 * self.acceleration
 
         self.rect.topleft = self.position
+
+    def load_images(self, folder, prefix, count):
+        """
+        批量加载并缩放动画帧
+        folder: 子文件夹名 (如 "boy")
+        prefix: 文件名前缀 (如 "Run")
+        count: 帧数量
+        """
+        return [
+            pygame.transform.scale(
+                pygame.image.load(f"{folder}/{prefix} ({i}).png"), (64, 64)
+            ) 
+            for i in range(1, count + 1)# count is 8 so the range is from 1 to (8+1) and you will get a value from 1 to 8
+        ]   
     
     def hit_floor(self):
 
@@ -125,6 +129,11 @@ class Hero():
             self.velocity.y = -self.VERTICAL_JUMP_SPEED
             self.on_ground = False
 
+    def attack(self):
+        if self.attacking and self.facing_right:
+            self.animate(self.attack_right_sprites, 0.1)
+        elif self.attacking:
+            self.animate(self.attack_left_sprites, 0.1)
 
 
 

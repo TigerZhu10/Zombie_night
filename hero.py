@@ -124,8 +124,6 @@ class Hero():
 
     def jump(self):
         if self.on_ground and self.moving_up:
-            # if self.facing_right:
-            #     self.animate(self.jump_right_sprites, 0.2)
             self.velocity.y = -self.VERTICAL_JUMP_SPEED
             self.on_ground = False
 

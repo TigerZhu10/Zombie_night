@@ -41,12 +41,10 @@ def update_screen(game_settings,screen,background,tile_map, my_hero, attack_slas
     screen.blit(background, (0,0))
 
     tile_map.draw_tile_map()
-
+    
     my_hero.display_hero()
-
-    my_hero.moving_hero()
     my_hero.hit_floor()
-    my_hero.jump() 
+    my_hero.moving_hero()
     my_hero.attack()
 
     attack_slash.draw()

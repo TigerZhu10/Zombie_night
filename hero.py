@@ -39,6 +39,8 @@ class Hero():
         self.attacking = False
 
         self.position = vector(self.x, self.y)
+        # Ensure initial draw/spawn uses the randomized position
+        self.rect.topleft = self.position
         self.velocity = vector(0, 0)
         self.acceleration = vector(0, 0)
 
@@ -51,33 +53,43 @@ class Hero():
 
     def moving_hero(self):
         self.acceleration = vector(0, self.GRAVITY)
-
         # HORIZONTAL_ACCELERATION change the sign, not the value
         # When keyup the if statement is false, so acceleration is always zero 
         if self.moving_right and self.rect.right <= self.game_settings.WINDOW_WIDTH:
             self.acceleration.x = self.HORIZONTAL_ACCELERATION
             self.facing_right = True
-            if self.on_ground == False:
+            if self.on_ground and self.moving_up:
+                self.jump_right()
+            elif not self.on_ground:
                 self.animate(self.jump_right_sprites, 0.2)
             else: 
                 self.animate(self.moving_right_sprites, 0.3)
-
+        
         elif self.moving_left and self.rect.left >= 0:
             self.acceleration.x = -self.HORIZONTAL_ACCELERATION
             self.facing_right = False
-            if self.on_ground == False:
+            if self.on_ground and self.moving_up:
+                self.jump_left()
+            elif not self.on_ground:
                 self.animate(self.jump_left_sprites, 0.2)
             else:
                 self.animate(self.moving_left_sprites, 0.3)
                 
         elif self.facing_right:
-            self.animate(self.idle_right_sprites, 0.2)
-            if self.on_ground == False:
+            if self.on_ground and self.moving_up:
+                self.jump_right()
+            elif not self.on_ground:
                 self.animate(self.jump_right_sprites, 0.2)
+            else:
+                self.animate(self.idle_right_sprites, 0.2)
+
         else:
-            self.animate(self.idle_left_sprites, 0.2)
-            if self.on_ground == False:
+            if self.on_ground and self.moving_up:
+                self.jump_left()
+            elif not self.on_ground:
                 self.animate(self.jump_left_sprites, 0.2)
+            else:
+                self.animate(self.idle_left_sprites, 0.2)
 
         # You get a nagative number for acceleration when it's zero
         self.acceleration.x = self.acceleration.x - self.velocity.x * self.HORIZONTAL_FRICTION
@@ -122,10 +134,16 @@ class Hero():
         self.current_sprite = (self.current_sprite + speed) % len(sprite_list)
         self.image = sprite_list[int(self.current_sprite)]
 
-    def jump(self):
-        if self.on_ground and self.moving_up:
-            self.velocity.y = -self.VERTICAL_JUMP_SPEED
-            self.on_ground = False
+    def jump_left(self):
+        self.velocity.y = -self.VERTICAL_JUMP_SPEED
+        self.animate(self.jump_left_sprites, 0.2)
+        self.on_ground = False
+
+    def jump_right(self):
+        self.velocity.y = -self.VERTICAL_JUMP_SPEED
+        self.animate(self.jump_right_sprites, 0.2)
+        self.on_ground = False
+
 
     def attack(self):
         if self.attacking and self.facing_right:

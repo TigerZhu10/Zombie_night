@@ -4,6 +4,7 @@ import game_functions
 from create_background import Background
 from hero import Hero
 from slash import Slash
+from pygame.sprite import Group
 
 pygame.init()
 
@@ -19,19 +20,20 @@ pygame.display.set_caption("Zombie Night!")
 background = pygame.image.load("./assets/images/background.png")
 background = pygame.transform.scale(background, (game_settings.WINDOW_WIDTH, game_settings.WINDOW_HEIGHT))
 
+slash_group = Group()
+
 tile_map = Background(game_settings,screen)
 
 my_hero = Hero(screen, game_settings, tile_map)
 
-attack_slash = Slash(screen, my_hero)
 
 
 
 def Game_runner():
     game_running = True
     while game_running: 
-        game_functions.check_mouse_key_events(my_hero, screen)
-        game_functions.update_screen(game_settings, screen, background, tile_map, my_hero, attack_slash)
+        game_functions.check_mouse_key_events(my_hero, screen, slash_group)
+        game_functions.update_screen(game_settings, screen, background, tile_map, my_hero, slash_group)
 
         clock.tick(FPS)
 Game_runner()

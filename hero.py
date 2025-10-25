@@ -36,7 +36,7 @@ class Hero():
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
-        self.attacking = False
+        self.hero_attack = False
 
         self.position = vector(self.x, self.y)
         # Ensure initial draw/spawn uses the randomized position
@@ -60,6 +60,7 @@ class Hero():
             self.facing_right = True
             if self.on_ground and self.moving_up:
                 self.jump_right()
+
             elif not self.on_ground:
                 self.animate(self.jump_right_sprites, 0.2)
             else: 
@@ -116,6 +117,7 @@ class Hero():
         ]   
     
     def hit_floor(self):
+        self.on_ground = False
 
         for tile in self.tile_map.all_tiles_rect:
             if self.rect.colliderect(tile):
@@ -123,7 +125,7 @@ class Hero():
                     self.rect.bottom = tile.top 
                     self.position.y = self.rect.top
                     self.velocity.y = 0
-                    self.on_ground = True
+                    self.on_ground = True                        
 
     def animate(self, sprite_list, speed):
         """
@@ -143,16 +145,13 @@ class Hero():
         self.velocity.y = -self.VERTICAL_JUMP_SPEED
         self.animate(self.jump_right_sprites, 0.2)
         self.on_ground = False
-
-
-    def attack(self):
-        if self.attacking and self.facing_right:
-            self.animate(self.attack_right_sprites, 0.1)
-        elif self.attacking:
-            self.animate(self.attack_left_sprites, 0.1)
-
-
-
+    
+    def attack_animate(self):
+        if self.hero_attack:
+            if self.facing_right:
+                self.animate(self.attack_right_sprites, 0.2)
+            else:
+                self.animate(self.attack_left_sprites, 0.2)
         
     def display_hero(self): 
         self.screen.blit(self.image,self.rect)

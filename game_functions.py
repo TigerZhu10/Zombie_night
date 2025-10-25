@@ -9,10 +9,11 @@ def Key_up(event, my_hero):
     elif event.key == pygame.K_SPACE:
         my_hero.moving_up = False
     elif event.key == pygame.K_x:
-        my_hero.attacking = False
+        my_hero.hero_attack = False
+        
 
     
-def Key_down(event, my_hero, screen):
+def Key_down(event, my_hero, screen, slash_group):
     if event.key == pygame.K_RIGHT:
         my_hero.moving_right = True
     elif event.key == pygame.K_LEFT:
@@ -20,22 +21,34 @@ def Key_down(event, my_hero, screen):
     elif event.key == pygame.K_SPACE:
         my_hero.moving_up = True
     elif event.key == pygame.K_x:
-        my_hero.attacking = True
-        attack_slash = Slash(screen, my_hero)
+        slash_group.add(Slash(screen, my_hero))
+        my_hero.hero_attack = True
+        
 
-def check_mouse_key_events(my_hero, screen):
+def update_slash(slash_group, game_settings):
+    for slash in slash_group.sprites():
+        slash.draw_slash()
+        slash.display_slash()
+
+    for slash in slash_group.copy():
+        if slash.rect.left >= game_settings.WINDOW_WIDTH:
+            slash_group.remove(slash)
+
+
+
+def check_mouse_key_events(my_hero, screen, slash_group):
     for ev in pygame.event.get():
         # print(ev)
         if ev.type == pygame.QUIT:
             sys.exit()
         
         elif ev.type == pygame.KEYDOWN:
-            Key_down(ev,my_hero, screen)
+            Key_down(ev,my_hero, screen, slash_group)
         elif ev.type == pygame.KEYUP:
             Key_up(ev,my_hero)
         
 
-def update_screen(game_settings,screen,background,tile_map, my_hero, attack_slash):
+def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group):
     screen.fill(game_settings.bg_color)
     
     screen.blit(background, (0,0))
@@ -45,9 +58,12 @@ def update_screen(game_settings,screen,background,tile_map, my_hero, attack_slas
     my_hero.display_hero()
     my_hero.hit_floor()
     my_hero.moving_hero()
-    my_hero.attack()
+    my_hero.attack_animate()
 
-    attack_slash.draw()
+
+
+    update_slash(slash_group, game_settings)
+
 
 
     pygame.display.flip()

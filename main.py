@@ -32,7 +32,7 @@ my_hero = Hero(screen, game_settings, tile_map)
 def Game_runner():
     game_running = True
     while game_running: 
-        game_functions.check_mouse_key_events(my_hero, screen, slash_group)
+        game_functions.check_mouse_key_events(game_settings, my_hero, screen, slash_group)
         game_functions.update_screen(game_settings, screen, background, tile_map, my_hero, slash_group)
 
         clock.tick(FPS)

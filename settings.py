@@ -8,3 +8,5 @@ class Settings():
         self.bg_color = (0,0,0)
 
         self.tile_size = 32
+
+        self.slash_speed = 10

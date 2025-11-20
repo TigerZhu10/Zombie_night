@@ -10,3 +10,5 @@ class Settings():
         self.tile_size = 32
 
         self.slash_speed = 10
+
+        self.zombie_speed = 5

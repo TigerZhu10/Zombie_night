@@ -5,6 +5,7 @@ from create_background import Background
 from hero import Hero
 from slash import Slash
 from pygame.sprite import Group
+from zombies import Zombies
 
 pygame.init()
 
@@ -26,6 +27,8 @@ tile_map = Background(game_settings,screen)
 
 my_hero = Hero(screen, game_settings, tile_map)
 
+walker_zombies = Zombies(screen, game_settings)
+
 
 
 
@@ -33,7 +36,7 @@ def Game_runner():
     game_running = True
     while game_running: 
         game_functions.check_mouse_key_events(game_settings, my_hero, screen, slash_group)
-        game_functions.update_screen(game_settings, screen, background, tile_map, my_hero, slash_group)
+        game_functions.update_screen(game_settings, screen, background, tile_map, my_hero, slash_group, walker_zombies)
 
         clock.tick(FPS)
 Game_runner()

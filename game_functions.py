@@ -10,8 +10,6 @@ def Key_up(event, my_hero):
         my_hero.moving_up = False
     elif event.key == pygame.K_x:
         my_hero.hero_attack = False
-        
-
     
 def Key_down(event, my_hero, screen, slash_group, game_settings):
     if event.key == pygame.K_RIGHT:
@@ -27,19 +25,19 @@ def Key_down(event, my_hero, screen, slash_group, game_settings):
 
 def update_slash(slash_group, game_settings):
     for slash in slash_group.sprites():
-        slash.draw_slash()
+        # slash.draw_slash()
         slash.display_slash()
-        
+
     # delete the slash when it's out of the screen
     for slash in slash_group.copy():
-        if slash.rect.left >= game_settings.WINDOW_WIDTH:
+        if slash.rect_right.x >= game_settings.WINDOW_WIDTH or slash.rect_left.x <= 0:
             slash_group.remove(slash)
+        print(len(slash_group))
 
 
 
 def check_mouse_key_events(game_settings, my_hero, screen, slash_group):
     for ev in pygame.event.get():
-        # print(ev)
         if ev.type == pygame.QUIT:
             sys.exit()
         
@@ -49,7 +47,7 @@ def check_mouse_key_events(game_settings, my_hero, screen, slash_group):
             Key_up(ev,my_hero)
         
 
-def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group):
+def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group, walker_zombies):
     screen.fill(game_settings.bg_color)
     
     screen.blit(background, (0,0))
@@ -60,6 +58,9 @@ def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group
     my_hero.hit_floor()
     my_hero.moving_hero()
     my_hero.attack_animate()
+
+    walker_zombies.display_zombies()
+    walker_zombies.update()
 
 
 

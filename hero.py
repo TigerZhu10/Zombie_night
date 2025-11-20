@@ -8,8 +8,6 @@ class Hero():
         self.game_settings = game_settings
         self.tile_map = tile_map
 
-        # self.move_right_sprites = self.load_images("./animation/boys", "Run", 8)
-
 
         self.idle_right_sprites = self.load_images("./assets/images/player/jump/idle/", "idle",  9)
         self.idle_left_sprites = [pygame.transform.flip(s, True, False) for s in self.idle_right_sprites]

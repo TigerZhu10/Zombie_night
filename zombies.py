@@ -28,15 +28,39 @@ class Zombies(Sprite):
         self.rect_left = self.image_left.get_rect()
         self.rect_left.topleft = (random.randint(0, self.game_settings.WINDOW_WIDTH), random.randint(0,10))
 
+        self.position_left_rect = vector(self.rect_left.x, self.rect_left.y)
+        self.position_right_rect = vector(self.rect_right.x, self.rect_right.y)
+        # Ensure initial draw/spawn uses the randomized position
+        self.rect_left.topleft = self.position_left_rect
+        self.rect_right.topleft = self.position_right_rect
+        self.acceleration_left_rect = vector(0, 0)
+        self.acceleration_right_rect = vector(0, 0)
+
+        self.GRAVITY = 2
+
     def update(self):
+        self.acceleration_left_rect = vector(0, self.GRAVITY)
+        self.acceleration_right_rect = vector(0, self.GRAVITY)
+
+
+
+
         if self.move_right:
-            self.rect_right.x += self.game_settings.zombie_speed
+            self.position_right_rect.x += self.game_settings.zombie_speed
             if self.rect_right.right >= self.game_settings.WINDOW_WIDTH:
-                self.rect_right.x = 0
+                self.position_right_rect.x = 0
         else:
-            self.rect_left.x -= self.game_settings.zombie_speed
+            self.position_left_rect.x-= self.game_settings.zombie_speed
             if self.rect_left.left <= 0:
-                self.rect_left.left = self.game_settings.WINDOW_WIDTH
+                self.position_left_rect.left = self.game_settings.WINDOW_WIDTH
+
+        self.position_left_rect += self.acceleration_left_rect
+        self.position_right_rect += self.acceleration_right_rect
+
+        self.rect_left.topleft = self.position_left_rect
+        self.rect_right.topleft = self.position_right_rect
+
+        
 
     def display_zombies(self):
         if self.move_left:

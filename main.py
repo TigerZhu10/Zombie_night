@@ -27,7 +27,7 @@ tile_map = Background(game_settings,screen)
 
 my_hero = Hero(screen, game_settings, tile_map)
 
-walker_zombies = Zombies(screen, game_settings)
+walker_zombies = Zombies(screen, game_settings, tile_map)
 
 
 

@@ -59,8 +59,8 @@ def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group
     my_hero.moving_hero()
     my_hero.attack_animate()
 
-    walker_zombies.display_zombies()
     walker_zombies.update()
+    walker_zombies.display_zombies()
 
 
 

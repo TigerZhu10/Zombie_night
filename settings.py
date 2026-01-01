@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 class Settings():
     def __init__(self):
@@ -11,4 +11,8 @@ class Settings():
 
         self.slash_speed = 10
 
-        self.zombie_speed = 5
+        self.boy_zombie_speed = random.randint(1,6)
+        self.girl_zombie_speed = random.randint(1,6)
+
+        self.GRAVITY = 0.45
+        self.SIZE = (80, 80)

@@ -115,7 +115,7 @@ class Hero():
         ]   
     
     def hit_floor(self):
-        self.on_ground = False
+        # self.on_ground = False
 
         for tile in self.tile_map.all_tiles_rect:
             if self.rect.colliderect(tile):

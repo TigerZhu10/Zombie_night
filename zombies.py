@@ -1,70 +1,107 @@
-import pygame, random
+import random
+import pygame
 from pygame.sprite import Sprite
+
 vector = pygame.math.Vector2
 
+
 class Zombies(Sprite):
-    def __init__(self, screen, game_settings):
+
+    def __init__(self, screen, game_settings, tile_map):
         super().__init__()
         self.screen = screen
         self.game_settings = game_settings
+        self.tile_map = tile_map
 
-        base = pygame.image.load("./assets/images/zombie/boy/walk/Walk (1).png").convert_alpha()
-        self.image_right = pygame.transform.scale(base, (80, 80))
+        # 0 = left, 1 = right
+        self.move_right = bool(random.randint(0, 1))
 
-        self.move_left = False
-        self.move_right = False
-        self.flag = random.randint(0,1) # 0 = left; 1 = right
-        if self.flag == 0:
-            self.move_left = True
-        if self.flag == 1:
-            self.move_right = True
+        # Load images once
+        self.images = self._load_images()
 
-        self.rect_right = self.image_right.get_rect()
-        self.rect_right.x = random.randint(0, self.game_settings.WINDOW_WIDTH)
-        self.rect_right.y = random.randint(0,10)
+        # Create zombies (each has: pos, vel, rect, kind)
+        self.zombies = [
+            self._create_zombie(kind="boy"),
+            self._create_zombie(kind="girl"),
+        ]
 
-        self.image_left = pygame.transform.flip(self.image_right, True, False)
-        self.image_left = pygame.transform.scale(self.image_left, (80, 80))
-        self.rect_left = self.image_left.get_rect()
-        self.rect_left.topleft = (random.randint(0, self.game_settings.WINDOW_WIDTH), random.randint(0,10))
 
-        self.position_left_rect = vector(self.rect_left.x, self.rect_left.y)
-        self.position_right_rect = vector(self.rect_right.x, self.rect_right.y)
-        # Ensure initial draw/spawn uses the randomized position
-        self.rect_left.topleft = self.position_left_rect
-        self.rect_right.topleft = self.position_right_rect
-        self.acceleration_left_rect = vector(0, 0)
-        self.acceleration_right_rect = vector(0, 0)
+    def _load_images(self):
+        def load_pair(path):
+            img_r = pygame.image.load(path).convert_alpha()
+            img_r = pygame.transform.scale(img_r, self.game_settings.SIZE)
+            img_l = pygame.transform.flip(img_r, True, False)
+            return {"right": img_r, "left": img_l}
 
-        self.GRAVITY = 2
+        return {
+            "boy": load_pair("./assets/images/zombie/boy/walk/Walk (1).png"),
+            "girl": load_pair("./assets/images/zombie/girl/walk/Walk (1).png"),
+        }
+
+    def _random_spawn(self):
+        x = random.randint(0, self.game_settings.WINDOW_WIDTH)
+        y = random.randint(0, 10)
+        return vector(x, y)
+
+    def _create_zombie(self, kind: str):
+        pos = self._random_spawn()
+        rect = self.images[kind]["right"].get_rect(topleft=pos)
+        speed = self.game_settings.boy_zombie_speed if kind == "boy" else self.game_settings.girl_zombie_speed
+
+        return {
+            "kind": kind,
+            "pos": pos,
+            "vel": vector(0, 0),
+            "rect": rect,
+            "on_ground": False,
+            "speed" : speed,
+        }
 
     def update(self):
-        self.acceleration_left_rect = vector(0, self.GRAVITY)
-        self.acceleration_right_rect = vector(0, self.GRAVITY)
+        self._move_horizontal()
+        self._apply_gravity_and_fall()
+        self._sync_rects()
+        self._hit_floor()
+
+    def _move_horizontal(self):
+        for z in self.zombies:
+            speed = z["speed"]
+            dx = speed if self.move_right else -speed
+            z["pos"].x += dx
+
+            if self.move_right and z["rect"].left >= self.game_settings.WINDOW_WIDTH:
+                z["pos"].x = 0
+            elif (not self.move_right) and z["rect"].right <= 0:
+                z["pos"].x = self.game_settings.WINDOW_WIDTH
 
 
+    def _apply_gravity_and_fall(self):
+        for z in self.zombies:
+            z["on_ground"] = False
+            acc = vector(0, self.game_settings.GRAVITY)
 
+            z["vel"] += acc
+            z["pos"] += z["vel"] + 0.5 * acc
 
-        if self.move_right:
-            self.position_right_rect.x += self.game_settings.zombie_speed
-            if self.rect_right.right >= self.game_settings.WINDOW_WIDTH:
-                self.position_right_rect.x = 0
-        else:
-            self.position_left_rect.x-= self.game_settings.zombie_speed
-            if self.rect_left.left <= 0:
-                self.position_left_rect.left = self.game_settings.WINDOW_WIDTH
+    def _sync_rects(self):
+        for z in self.zombies:
+            z["rect"].topleft = (z["pos"].x, z["pos"].y)
 
-        self.position_left_rect += self.acceleration_left_rect
-        self.position_right_rect += self.acceleration_right_rect
+    def _hit_floor(self):
+        tiles = self.tile_map.all_tiles_rect
 
-        self.rect_left.topleft = self.position_left_rect
-        self.rect_right.topleft = self.position_right_rect
+        for z in self.zombies:
+            for tile in tiles:
+                if z["rect"].colliderect(tile):
+                    if z["rect"].bottom <= tile.bottom:
+                        z["rect"].bottom = tile.top
+                        z["pos"].y = z["rect"].top
+                        z["vel"].y = 0
+                        z["on_ground"] = True
 
-        
 
     def display_zombies(self):
-        if self.move_left:
-            self.screen.blit(self.image_left, self.rect_left)
-        else:
-            self.screen.blit(self.image_right, self.rect_right)
-        
+        direction = "right" if self.move_right else "left"
+        for z in self.zombies:
+            img = self.images[z["kind"]][direction]
+            self.screen.blit(img, z["rect"])

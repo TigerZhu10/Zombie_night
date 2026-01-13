@@ -24,14 +24,9 @@ class Slash(Sprite):
 
     def display_slash(self):
         if self.frozen_facing_right: 
-            self.draw_right_slash()
+            self.screen.blit(self.image_right, self.rect_right)
             self.rect_right.x += self.game_settings.slash_speed
         else:
-            self.draw_left_slash()
+            self.screen.blit(self.image_left, self.rect_left)
             self.rect_left.x -= self.game_settings.slash_speed
-
-    def draw_right_slash(self):
-        self.screen.blit(self.image_right, self.rect_right)
-
-    def draw_left_slash(self):
-        self.screen.blit(self.image_left, self.rect_left)
+        

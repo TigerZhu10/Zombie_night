@@ -34,6 +34,17 @@ def update_slash(slash_group, game_settings):
             slash_group.remove(slash)
         print(len(slash_group))
 
+def check_zombie_slash_collisions(slash_group, walker_zombies):
+    for slash in slash_group.copy():
+        if slash.frozen_facing_right:
+            slash_rect = slash.rect_right
+        else:
+            slash_rect = slash.rect_left
+
+        for z in walker_zombies.zombies.copy():
+            if slash_rect.colliderect(z["rect"]):
+                walker_zombies.zombies.remove(z)
+                slash_group.remove(slash)
 
 
 def check_mouse_key_events(game_settings, my_hero, screen, slash_group):
@@ -62,10 +73,11 @@ def update_screen(game_settings,screen,background,tile_map, my_hero, slash_group
     walker_zombies.update()
     walker_zombies.display_zombies()
 
-
+    check_zombie_slash_collisions(slash_group, walker_zombies)
 
     update_slash(slash_group, game_settings)
 
 
 
     pygame.display.flip()
+

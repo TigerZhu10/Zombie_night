@@ -13,6 +13,7 @@ class Zombies(Sprite):
         self.game_settings = game_settings
         self.tile_map = tile_map
 
+
         # 0 = left, 1 = right
         self.move_right = bool(random.randint(0, 1))
 
@@ -20,10 +21,7 @@ class Zombies(Sprite):
         self.images = self._load_images()
 
         # Create zombies (each has: pos, vel, rect, kind)
-        self.zombies = [
-            self._create_zombie(kind="boy"),
-            self._create_zombie(kind="girl"),
-        ]
+        self.zombies = []
 
 
     def _load_images(self):
@@ -56,6 +54,15 @@ class Zombies(Sprite):
             "on_ground": False,
             "speed" : speed,
         }
+    
+    def spawn_one_zombie(self):
+        kind = random.choice(["boy", "girl"])
+        self.zombies.append(self._create_zombie(kind))
+        self.game_settings.zombie_spawned_count += 1
+
+        # self.spawn_delay = random.randint(500, 2000)
+        self.next_spawn_time = pygame.time.get_ticks() + self.game_settings.zombie_random_spawn_time
+
 
     def update(self):
         self._move_horizontal()
@@ -82,7 +89,7 @@ class Zombies(Sprite):
 
             z["vel"] += acc
             z["pos"] += z["vel"] + 0.5 * acc
-
+    
     def _sync_rects(self):
         for z in self.zombies:
             z["rect"].topleft = (z["pos"].x, z["pos"].y)

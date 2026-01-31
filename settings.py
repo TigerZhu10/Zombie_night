@@ -11,11 +11,12 @@ class Settings():
 
         self.slash_speed = 10
 
-        self.boy_zombie_speed = random.randint(1,6)
-        self.girl_zombie_speed = random.randint(1,6)
 
-        self.zombie_random_spawn_time = random.randint(3000,6000)
-        self.zombie_random_spawn_number = random.randint(2,5)
+        self.attack_cooldown = 500
+        self.last_attack_time = 0
+
+        # self.zombie_random_spawn_time = random.randint(3000,6000)
+        # self.zombie_random_spawn_number = random.randint(2,5)
         self.zombie_spawned_count = 0
         self.max_zombies_round = 10
 

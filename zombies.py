@@ -23,6 +23,17 @@ class Zombies(Sprite):
         # Create zombies (each has: pos, vel, rect, kind)
         self.zombies = []
 
+        self.next_spawn_time = pygame.time.get_ticks()
+
+        self.randomize_round_settings()
+        
+
+
+    def randomize_round_settings(self):
+        self.boy_zombie_speed = random.randint(1,6)
+        self.girl_zombie_speed = random.randint(1,6)
+        self.zombie_random_spawn_time = random.randint(3000,6000)
+        self.zombie_random_spawn_number = random.randint(2,5)
 
     def _load_images(self):
         def load_pair(path):
@@ -44,7 +55,10 @@ class Zombies(Sprite):
     def _create_zombie(self, kind: str):
         pos = self._random_spawn()
         rect = self.images[kind]["right"].get_rect(topleft=pos)
-        speed = self.game_settings.boy_zombie_speed if kind == "boy" else self.game_settings.girl_zombie_speed
+        if kind == "boy":
+            speed = self.boy_zombie_speed
+        else:
+            speed = self.girl_zombie_speed
 
         return {
             "kind": kind,
@@ -56,19 +70,30 @@ class Zombies(Sprite):
         }
     
     def spawn_one_zombie(self):
-        kind = random.choice(["boy", "girl"])
-        self.zombies.append(self._create_zombie(kind))
-        self.game_settings.zombie_spawned_count += 1
+        zombie_random_spawn_number = random.randint(2,5)
+        for _ in range(zombie_random_spawn_number):
+            kind = random.choice(["boy", "girl"])
+            self.zombies.append(self._create_zombie(kind))
+            self.game_settings.zombie_spawned_count += 1
 
-        # self.spawn_delay = random.randint(500, 2000)
-        self.next_spawn_time = pygame.time.get_ticks() + self.game_settings.zombie_random_spawn_time
+
+        self.zombie_random_spawn_time = random.randint(3000,6000)
+        self.next_spawn_time = pygame.time.get_ticks() + self.zombie_random_spawn_time
 
 
     def update(self):
+        self.zombie_spawn_rounds()
         self._move_horizontal()
         self._apply_gravity_and_fall()
         self._sync_rects()
         self._hit_floor()
+
+    def zombie_spawn_rounds(self):
+
+        now = pygame.time.get_ticks()
+
+        if self.game_settings.zombie_spawned_count < self.game_settings.max_zombies_round and now >= self.next_spawn_time:
+            self.spawn_one_zombie()
 
     def _move_horizontal(self):
         for z in self.zombies:

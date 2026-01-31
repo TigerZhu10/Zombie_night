@@ -19,8 +19,11 @@ def Key_down(event, my_hero, screen, slash_group, game_settings):
     elif event.key == pygame.K_SPACE:
         my_hero.moving_up = True
     elif event.key == pygame.K_x:
-        slash_group.add(Slash(screen, my_hero, game_settings))
-        my_hero.hero_attack = True
+        current_time = pygame.time.get_ticks()
+        if current_time - game_settings.last_attack_time >= game_settings.attack_cooldown:
+            slash_group.add(Slash(screen, my_hero, game_settings))
+            my_hero.hero_attack = True
+            game_settings.last_attack_time = current_time
         
 
 def update_slash(slash_group, game_settings):
@@ -32,7 +35,7 @@ def update_slash(slash_group, game_settings):
     for slash in slash_group.copy():
         if slash.rect_right.x >= game_settings.WINDOW_WIDTH or slash.rect_left.x <= 0:
             slash_group.remove(slash)
-        print(len(slash_group))
+        # print(len(slash_group))
 
 def check_zombie_slash_collisions(slash_group, walker_zombies):
     for slash in slash_group.copy():

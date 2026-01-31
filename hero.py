@@ -44,8 +44,8 @@ class Hero():
 
         self.HORIZONTAL_ACCELERATION = 1
         self.HORIZONTAL_FRICTION = 0.15
-        self.VERTICAL_JUMP_SPEED = 10
-        self.GRAVITY = 0.35
+        self.VERTICAL_JUMP_SPEED = 12
+        self.GRAVITY = 0.45
 
         self.on_ground = False
 
